@@ -50,7 +50,7 @@ npm run typecheck  # 型チェック
 
 ```bash
 # 例: Cloudflare Pages
-npx wrangler pages deploy dist --project-name neko-ookami-quest
+npx wrangler pages deploy dist --project-name nyanro
 ```
 
 ## 構成
