@@ -1,4 +1,4 @@
-# あるちゅーるQUEST — Architecture
+# にゃんろう-猫狼- — Architecture
 
 Client-only party game. No backend, no persistence, no network. All state lives in
 one in-memory store (`src/state.ts`) for the lifetime of a single browser session.
@@ -20,32 +20,26 @@ data can never leave the device because there is no channel for it to leave thro
 
 ## 2. Screen state machine
 
-handoff / identity は 2 フェイズ（role / action）で共有し、本人確認後の遷移先だけが
-`state.phase` で分岐する（role→reveal, action→actionDraw）。
+役職フェイズのみ。参加人数は `names` 画面で登録された名前の数で決まる
+（`setNames` が `playerCount` を確定＝names が唯一の真実）。アクションカードは
+フィジカル運用のためアプリには実装しない。
 
 ```mermaid
 stateDiagram-v2
   [*] --> title
   title --> count: tap
   count --> names: なまえを入力する
-  names --> draw: 冒険をはじめる
+  names --> draw: 冒険をはじめる (入力名 >= 3)
   draw --> handoff: 抽選完了 (drawRoles)
 
-  state "役職フェイズ (phase=role)" as RolePhase {
+  state "役職フェイズ" as RolePhase {
     handoff --> identity: 本人確認へ
     identity --> reveal: はい、わたしです
     identity --> handoff: ちがいます
     reveal --> handoff: 確認した (次の人)
   }
   reveal --> allConfirmed: 確認した (最後の人)
-  allConfirmed --> handoff: アクションカードを配る (startActionPhase / phase=action)
-
-  state "アクションフェイズ (phase=action)" as ActionPhase {
-    identity --> actionDraw: はい、わたしです
-    actionDraw --> handoff: 確認した (次の人)
-    actionDraw --> actionDraw: ホームズの覗き (相手のカードのみ)
-  }
-  actionDraw --> quest: 確認した (最後の人)
+  allConfirmed --> quest: 宴をはじめる
   quest --> title: ゲーム終了 (resetGame)
 ```
 
@@ -53,9 +47,8 @@ stateDiagram-v2
 
 | Module | Responsibility |
 |---|---|
-| `state.ts` | 単一の状態機械。役職割当＋アクションカードを保持（秘匿）。localStorage/URLに書かない。 |
+| `state.ts` | 単一の状態機械。役職割当を保持（秘匿）。参加人数は登録名の数で確定。localStorage/URLに書かない。 |
 | `roles.ts` | 役職定義＋人数別構成（`composeRoles`, single source of truth）。 |
-| `actions.ts` | アクションカードのデッキ＋特殊役職の秘匿タスク（single source of truth）。 |
 | `router.ts` | 画面差し替え。履歴/URLを使わない（バックで役職を復元させない）。 |
 | `pixel.ts` | スプライトをデータから canvas 生成。役職名を含む画像/URLが存在しない。 |
 | `sfx.ts` | 共通効果音のみ。役職固有音は鳴らさない（周囲に漏らさない）。 |
@@ -77,9 +70,9 @@ stateDiagram-v2
 | 7 | 毛色と役職を連動させない | `furColors` は `state.ts` でランダム付与。`roles` と独立 |
 | 8 | 受け渡し画面は全員同一 | `handoff.ts` は名前以外を出さない。背景・色・演出は共通 |
 | 9 | クエスト画面で構成を開示しない | `quest.ts` は人数のみ表示。役職一覧/人数比を出さない |
-| 10 | アクションカードも本人以外に見せない | `action-draw.ts` は役職表示と同じ作法（本人確認後に表示、確認後に破棄） |
-| 11 | ホームズの覗きは相手のカードのみ | `actionCardOf(index)` はカード文面だけ返す。相手の役職・秘匿タスクは見えない |
-| 12 | 猫狼/猫ババの秘匿タスクは本人だけ | `SECRET_TASK` は所有者の `action-draw` 画面でのみ描画。覗きでは露出しない |
+
+アクションカードはフィジカル（紙）運用のためアプリには実装しない。特殊役職の指示は
+役職確認画面（`reveal.ts`）の能力文で本人にのみ伝わる。
 
 自動検証（`playwright` によるフロー走査）で 5/6/9 のDOM漏洩を毎回アサートできる。
 `grep -rn "localStorage\|sessionStorage\|location.hash" src/` が空であることも不変条件。

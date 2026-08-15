@@ -13,14 +13,7 @@ export type Screen =
   | "identity"
   | "reveal"
   | "allConfirmed"
-  | "actionDraw"
   | "quest";
-
-/**
- * フェイズ。受け渡し(handoff)/本人確認(identity)は両フェイズで共有し、
- * 本人確認後の遷移先だけが変わる（role→reveal, action→actionDraw）。
- */
-export type Phase = "role" | "action";
 
 /** 役職の静的定義。表示名・能力文・テーマ色・スプライト装飾を持つ。 */
 export interface RoleDef {
@@ -46,8 +39,7 @@ export interface RoleDef {
 /** ランタイムのゲーム状態。役職割当（roles）は秘匿情報。 */
 export interface GameState {
   screen: Screen;
-  /** 現在のフェイズ（役職確認 or アクションカード） */
-  phase: Phase;
+  /** 参加人数。**登録されたなまえの数**で決まる（names が唯一の真実）。 */
   playerCount: number;
   /** プレイヤー名。index が冒険者番号に対応。 */
   names: string[];
@@ -60,11 +52,6 @@ export interface GameState {
    * 各プレイヤーの毛色（受付・集合シーンの見た目）。ランダムで、役職と一切連動しない。
    */
   furColors: string[];
-  /**
-   * 各プレイヤーが引いたアクションカード。index は players 整合。**秘匿情報**。
-   * アクションフェイズ開始時に配られる。
-   */
-  actionCards: string[];
   /** 受け渡し〜確認のシーケンスで「今スマホを持つ人」 */
   currentPlayerIndex: number;
   /** 役職を確認し終えた人数 */

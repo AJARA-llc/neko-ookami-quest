@@ -13,7 +13,6 @@ import { handoffScreen } from "./screens/handoff";
 import { identityScreen } from "./screens/identity";
 import { revealScreen } from "./screens/reveal";
 import { allConfirmedScreen } from "./screens/all-confirmed";
-import { actionDrawScreen } from "./screens/action-draw";
 import { questScreen } from "./screens/quest";
 
 const RENDERERS: Record<Screen, () => HTMLElement> = {
@@ -25,7 +24,6 @@ const RENDERERS: Record<Screen, () => HTMLElement> = {
   identity: identityScreen,
   reveal: revealScreen,
   allConfirmed: allConfirmedScreen,
-  actionDraw: actionDrawScreen,
   quest: questScreen,
 };
 

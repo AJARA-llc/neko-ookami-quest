@@ -26,8 +26,8 @@ export function titleScreen(): HTMLElement {
 
   const sign = div(
     "tavern-sign",
-    h("span", { class: "sign-title", text: "あるちゅーるQUEST" }),
-    h("span", { class: "sign-sub", text: "〜猫狼たちの宴〜" }),
+    h("span", { class: "sign-title", text: "にゃんろう" }),
+    h("span", { class: "sign-sub", text: "-猫狼-" }),
   );
 
   const door = div("tavern-door", h("span", { class: "door-l" }), h("span", { class: "door-r" }));

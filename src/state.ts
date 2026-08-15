@@ -1,6 +1,5 @@
 import type { GameState, RoleId, Screen } from "./types";
 import { clampPlayers, composeRoles, MIN_PLAYERS } from "./roles";
-import { drawActionCards } from "./actions";
 
 // ===== ゲーム状態ストア =====
 // 状態はモジュール内クロージャに閉じ込める。localStorage / URL には一切書かない。
@@ -21,12 +20,10 @@ const FUR_PALETTE = [
 function freshState(): GameState {
   return {
     screen: "title",
-    phase: "role",
     playerCount: 5,
     names: [],
     roles: [],
     furColors: [],
-    actionCards: [],
     currentPlayerIndex: 0,
     confirmedCount: 0,
     soundEnabled: false, // 既定 OFF（事前選択制）
@@ -50,26 +47,6 @@ export function currentName(): string {
   return state.names[state.currentPlayerIndex] ?? `冒険者${state.currentPlayerIndex + 1}`;
 }
 
-/** 今スマホを持つプレイヤーのアクションカード（アクションフェイズ中のみ）。 */
-export function currentActionCard(): string {
-  return state.actionCards[state.currentPlayerIndex] ?? "";
-}
-
-/** 指定プレイヤーのアクションカード（ホームズの覗き用）。 */
-export function actionCardOf(index: number): string {
-  return state.actionCards[index] ?? "";
-}
-
-/** 今のプレイヤー以外の一覧（ホームズの覗き対象選択用）。 */
-export function otherPlayers(): { index: number; name: string }[] {
-  const list: { index: number; name: string }[] = [];
-  for (let i = 0; i < state.playerCount; i++) {
-    if (i === state.currentPlayerIndex) continue;
-    list.push({ index: i, name: state.names[i] ?? `冒険者${i + 1}` });
-  }
-  return list;
-}
-
 export function isAllConfirmed(): boolean {
   return state.confirmedCount >= state.playerCount;
 }
@@ -83,16 +60,16 @@ export function setPlayerCount(n: number): void {
   state.playerCount = clampPlayers(n);
 }
 
-/** 名前入力を確定。空欄は「冒険者NN」で補完する。 */
+/**
+ * 名前入力を確定。**実際に入力されたなまえの数**を参加人数の唯一の真実とする。
+ * 事前の人数選択より優先。空欄は参加者として数えない
+ *   → 4人ぶんだけ入力すれば役職も4人ぶんになる（operator確定の挙動）。
+ * 入力が MIN_PLAYERS 未満で呼ばれることは呼び出し側（names画面）が防ぐ。
+ */
 export function setNames(rawNames: string[]): void {
-  const n = state.playerCount;
-  const names: string[] = [];
-  const furColors: string[] = [];
-  for (let i = 0; i < n; i++) {
-    const nm = (rawNames[i] ?? "").trim();
-    names.push(nm.length > 0 ? nm : `冒険者${String(i + 1).padStart(2, "0")}`);
-    furColors.push(randomFur());
-  }
+  const names = rawNames.map((nm) => (nm ?? "").trim()).filter((nm) => nm.length > 0);
+  const furColors = names.map(() => randomFur());
+  state.playerCount = names.length;
   state.names = names;
   state.furColors = furColors;
 }
@@ -104,15 +81,7 @@ export function drawRoles(): void {
   state.confirmedCount = 0;
 }
 
-/** アクションフェイズを開始（カードを配り、受け渡しシーケンスを頭出し）。 */
-export function startActionPhase(): void {
-  state.phase = "action";
-  state.actionCards = drawActionCards(state.playerCount);
-  state.currentPlayerIndex = 0;
-  state.confirmedCount = 0;
-}
-
-/** 現在のプレイヤーが確認を終えた（役職／アクション共通）— 確認済みに進める。 */
+/** 現在のプレイヤーが役職を確認し終えた — 確認済みに進める。 */
 export function confirmCurrentPlayer(): void {
   state.confirmedCount = Math.min(state.playerCount, state.confirmedCount + 1);
   if (state.currentPlayerIndex < state.playerCount - 1) {

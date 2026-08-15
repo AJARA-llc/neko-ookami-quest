@@ -2,7 +2,7 @@
 // 「あなたは『NAME』さんですか？」はい→鍵が開いて役職確認へ。ちがいます→本人へ渡す案内。
 
 import { navigate } from "../router";
-import { currentName, getState } from "../state";
+import { currentName } from "../state";
 import { messageWindow } from "../components/message-window";
 import { commandMenu, type Command } from "../components/command-menu";
 import { sfx } from "../sfx";
@@ -26,8 +26,7 @@ export function identityScreen(): HTMLElement {
     label: "はい、わたしです",
     onSelect: () => {
       door.classList.add("is-unlocked");
-      const next = getState().phase === "action" ? "actionDraw" : "reveal";
-      window.setTimeout(() => navigate(next), 560);
+      window.setTimeout(() => navigate("reveal"), 560);
     },
   };
   const no: Command = {

@@ -1,6 +1,6 @@
 {
   "repo": "neko-ookami-quest",
-  "role": "product / standalone client-only party game (あるちゅーるQUEST 〜猫狼たちの宴〜 — 株式会社エピック「あるちゅーる」販促ゲーム)",
+  "role": "product / standalone client-only party game (にゃんろう-猫狼- — 株式会社エピック「あるちゅーる」販促ゲーム)",
   "entity": "AJARA",
   "belongs": [
     "game client code (src/**), pixel sprites (data-driven, no image assets)",

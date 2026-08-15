@@ -79,6 +79,15 @@
 
 /* ---------- 6. 名前入力 ---------- */
 .scene--names { justify-content: flex-start; }
+.name-notice {
+  width: 100%;
+  margin: 6px 0 2px;
+  color: var(--danger);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+.name-notice[hidden] { display: none; }
 .name-list {
   width: 100%;
   display: flex;

@@ -3,9 +3,11 @@
 
 import { navigate } from "../router";
 import { getState, setNames } from "../state";
+import { MIN_PLAYERS } from "../roles";
 import { messageWindow } from "../components/message-window";
 import { commandMenu } from "../components/command-menu";
 import { renderCat } from "../pixel";
+import { sfx } from "../sfx";
 import { h, div } from "../dom";
 
 const PREVIEW_FURS = ["#e8b45a", "#d9d2c5", "#4a4a52", "#a9805a", "#c9c2b6", "#e0a87e", "#8a6f52", "#b0b7bd"];
@@ -46,10 +48,22 @@ export function namesScreen(): HTMLElement {
 
   root.appendChild(list);
 
+  // 入力数が足りないときの注意書き（初期は非表示）。役職は登録された名前の数で決まる。
+  const notice = h("p", { class: "name-notice", text: "", hidden: true });
+  root.appendChild(notice);
+
   const menu = commandMenu([
     {
       label: "冒険をはじめる",
       onSelect: () => {
+        // 登録された（＝入力された）なまえの数が、そのまま参加人数になる。
+        const filledCount = inputs.filter((i) => i.value.trim().length > 0).length;
+        if (filledCount < MIN_PLAYERS) {
+          sfx.cancel();
+          notice.textContent = `${MIN_PLAYERS}にん以上のなまえを入力してニャ！（いま ${filledCount}にん）`;
+          notice.hidden = false;
+          return;
+        }
         setNames(inputs.map((i) => i.value));
         navigate("draw");
       },

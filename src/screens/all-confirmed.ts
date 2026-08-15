@@ -3,7 +3,7 @@
 //   （シルエットは特定の席・毛色に紐づかない汎用の影のみ）。
 
 import { navigate } from "../router";
-import { getState, startActionPhase } from "../state";
+import { getState } from "../state";
 import { messageWindow } from "../components/message-window";
 import { commandMenu } from "../components/command-menu";
 import { renderCat, renderMug } from "../pixel";
@@ -32,7 +32,7 @@ export function allConfirmedScreen(): HTMLElement {
   );
 
   const msg = messageWindow(
-    "すべての冒険者が\n自分の運命を確認した！\n\nつづいて アクションカードを\n配るニャ！",
+    "すべての冒険者が\n自分の運命を確認した！\n\nさあ、宴のはじまりだ！",
   );
   root.appendChild(msg.el);
 
@@ -51,11 +51,10 @@ export function allConfirmedScreen(): HTMLElement {
 
   const menu = commandMenu([
     {
-      label: "アクションカードを配る",
+      label: "宴をはじめる",
       onSelect: () => {
         sfx.fanfare();
-        startActionPhase();
-        navigate("handoff");
+        navigate("quest");
       },
     },
   ]);
