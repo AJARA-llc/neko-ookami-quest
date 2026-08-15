@@ -1,0 +1,15 @@
+{
+  "repo": "neko-ookami-quest",
+  "role": "product / standalone client-only party game (あるちゅーるQUEST 〜猫狼たちの宴〜 — 株式会社エピック「あるちゅーる」販促ゲーム)",
+  "entity": "AJARA",
+  "belongs": [
+    "game client code (src/**), pixel sprites (data-driven, no image assets)",
+    "product docs (docs/flows/**), architecture + secrecy guarantees"
+  ],
+  "forbidden": [
+    "backend / DB / network calls — this game is intentionally offline & client-only (secrecy property)",
+    "writing role assignment to localStorage / URL / any persistent or shared channel"
+  ],
+  "ops": "no backend, no cron. Static build (dist/) → Cloudflare Pages. Zero runtime network requests.",
+  "note": "役職秘匿が最優先要件。docs/flows/architecture.md の秘匿保証テーブルを不変条件として維持する。Judgment splits → operator explicit instruction wins; when unsure, ask."
+}

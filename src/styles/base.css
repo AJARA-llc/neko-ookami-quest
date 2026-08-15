@@ -1,0 +1,205 @@
+/* ===== 基盤・共通UI ===== */
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  /* ピクセル体は擬似ボールドが滲むため合成を切る（太字はサイズ/色で表現） */
+  font-synthesis: none;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg-night-0);
+  color: var(--ink);
+  font-family: var(--font-jp);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+/* 9:16 縦画面ステージ（PCではレターボックス、スマホでは全画面） */
+#stage {
+  position: relative;
+  height: 100dvh;
+  width: min(100vw, calc(100dvh * 9 / 16));
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 12%, var(--bg-night-2), var(--bg-night-0) 78%);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+}
+
+#app {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ---- トップバー（音声トグル常設） ---- */
+.top-bar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  padding: calc(var(--stage-pad) * 0.6) var(--stage-pad) 0;
+  padding-top: max(calc(var(--stage-pad) * 0.6), env(safe-area-inset-top));
+}
+
+.sound-toggle {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--ink-dim);
+  background: var(--win-bg);
+  border: 2px solid var(--win-border-2);
+  border-radius: var(--radius-win);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.sound-toggle.is-on {
+  color: var(--gold);
+  border-color: var(--win-border);
+  box-shadow: 0 0 8px rgba(242, 211, 74, 0.4);
+}
+
+/* ---- 画面遷移 ---- */
+.screen {
+  position: relative;
+  min-height: 100%;
+  animation: screen-in 0.32s ease both;
+}
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.scene {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2.6vh, 20px);
+  padding: var(--stage-pad);
+  padding-bottom: max(var(--stage-pad), env(safe-area-inset-bottom));
+}
+
+/* ---- 会話ウィンドウ ---- */
+.msg-window {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, var(--win-bg-2), var(--win-bg));
+  border: 3px solid var(--win-border);
+  outline: 2px solid var(--win-border-2);
+  outline-offset: 1px;
+  border-radius: var(--radius-win);
+  padding: 14px 16px 18px;
+  box-shadow: 0 6px 0 var(--win-shadow), inset 0 0 0 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 10;
+}
+.msg-body {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  font-size: clamp(15px, 4.4vw, 19px);
+  letter-spacing: 0.02em;
+  min-height: 1.7em;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+.msg-cursor {
+  position: absolute;
+  right: 12px;
+  bottom: 6px;
+  color: var(--gold);
+  font-size: 12px;
+  opacity: 0;
+}
+.msg-window.is-done .msg-cursor {
+  animation: blink 0.9s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---- コマンドメニュー ---- */
+.cmd-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+.cmd-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-jp);
+  font-size: clamp(15px, 4.4vw, 18px);
+  color: var(--win-text);
+  background: linear-gradient(180deg, var(--win-bg-2), var(--win-bg));
+  border: 3px solid var(--win-border);
+  outline: 2px solid var(--win-border-2);
+  outline-offset: 1px;
+  border-radius: var(--radius-win);
+  padding: 13px 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--win-shadow);
+  transition: transform 0.05s, box-shadow 0.05s, background 0.12s;
+}
+.cmd-item .cmd-cursor {
+  color: var(--cursor);
+  opacity: 0;
+  font-size: 13px;
+  transform: translateX(-2px);
+}
+.cmd-item.is-active {
+  background: linear-gradient(180deg, #1b1c46, #101132);
+}
+.cmd-item.is-active .cmd-cursor {
+  opacity: 1;
+  animation: cursor-nudge 0.6s ease-in-out infinite alternate;
+}
+@keyframes cursor-nudge {
+  to {
+    transform: translateX(1px);
+  }
+}
+.cmd-item:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--win-shadow);
+}
+.cmd-item[disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.menu-slot {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 低モーション設定の尊重 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

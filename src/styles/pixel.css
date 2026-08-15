@@ -1,0 +1,376 @@
+/* ===== ドット絵の情景・エフェクト ===== */
+
+canvas {
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* ---------- タイトル: 夜空 ---------- */
+.night-sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.moon {
+  position: absolute;
+  top: 8%;
+  right: 14%;
+  width: 64px;
+  height: 64px;
+  background: var(--moon);
+  box-shadow: 0 0 40px 8px rgba(247, 243, 208, 0.35), inset -10px -8px 0 rgba(210, 205, 160, 0.5);
+  clip-path: polygon(50% 0, 82% 12%, 100% 50%, 82% 88%, 50% 100%, 18% 88%, 0 50%, 18% 12%);
+}
+.star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  box-shadow: 0 0 6px #fff;
+  animation: twinkle 2.4s steps(2) infinite;
+}
+.star--1 { top: 16%; left: 20%; }
+.star--2 { top: 26%; left: 60%; animation-delay: 0.7s; }
+.star--3 { top: 12%; left: 40%; animation-delay: 1.3s; }
+@keyframes twinkle { 50% { opacity: 0.2; } }
+.shooting-star {
+  position: absolute;
+  top: 20%;
+  left: -10%;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #fff);
+  opacity: 0;
+  animation: shoot 7s ease-in infinite;
+}
+@keyframes shoot {
+  0%, 88% { opacity: 0; transform: translate(0, 0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translate(120px, 60px); }
+}
+
+/* ---------- タイトル: 酒場 ---------- */
+.scene--title { justify-content: flex-end; gap: 0; padding-bottom: 8%; }
+.tavern {
+  position: relative;
+  width: min(78%, 300px);
+  margin-top: auto;
+  filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.5));
+}
+.tavern-roof {
+  position: relative;
+  height: 46px;
+  background: var(--wood-0);
+  clip-path: polygon(6% 100%, 0 100%, 18% 0, 82% 0, 100% 100%, 94% 100%);
+}
+.chimney {
+  position: absolute;
+  top: -18px;
+  right: 22%;
+  width: 16px;
+  height: 26px;
+  background: var(--wood-1);
+}
+.smoke {
+  position: absolute;
+  top: -8px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: rgba(200, 200, 210, 0.5);
+  border-radius: 50%;
+  animation: smoke 3s ease-out infinite;
+}
+.smoke--2 { animation-delay: 1.5s; }
+@keyframes smoke {
+  0% { opacity: 0.6; transform: translateY(0) scale(0.6); }
+  100% { opacity: 0; transform: translateY(-40px) scale(1.4); }
+}
+.roof-cat {
+  position: absolute;
+  top: -14px;
+  left: 16%;
+  width: 20px;
+  height: 16px;
+}
+.roof-cat-body {
+  position: absolute;
+  bottom: 0;
+  width: 18px;
+  height: 12px;
+  background: #14101c;
+  clip-path: polygon(0 100%, 0 40%, 20% 40%, 26% 0, 40% 0, 46% 40%, 100% 40%, 100% 100%);
+}
+.roof-cat-tail {
+  position: absolute;
+  right: -6px;
+  bottom: 0;
+  width: 10px;
+  height: 4px;
+  background: #14101c;
+  transform-origin: left center;
+  animation: tail-sway 1.6s ease-in-out infinite alternate;
+}
+@keyframes tail-sway { to { transform: rotate(-28deg); } }
+.tavern-sign {
+  position: relative;
+  z-index: 2;
+  margin: -6px auto 0;
+  width: 88%;
+  background: linear-gradient(180deg, #2a1a34, #1a1024);
+  border: 3px solid var(--win-border-2);
+  padding: 8px 6px;
+  text-align: center;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.sign-title {
+  display: block;
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  color: var(--gold);
+  font-size: clamp(15px, 5vw, 22px);
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0 #000;
+}
+.sign-sub {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-dim);
+  font-size: clamp(11px, 3.4vw, 14px);
+}
+.tavern-body {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  height: 96px;
+  background: linear-gradient(180deg, var(--wood-2), var(--wood-1));
+  border-top: 3px solid #1a0f0a;
+  padding: 10px;
+}
+.window {
+  width: 30px;
+  height: 34px;
+  background: var(--lantern);
+  border: 3px solid #2a1a0e;
+  box-shadow: 0 0 12px rgba(255, 180, 84, 0.6);
+  animation: window-flicker 3s steps(3) infinite;
+}
+@keyframes window-flicker { 50% { opacity: 0.82; } }
+.lantern {
+  width: 12px;
+  height: 16px;
+  align-self: flex-start;
+  margin-top: 6px;
+  background: var(--lantern);
+  border: 2px solid #2a1a0e;
+  box-shadow: 0 0 10px var(--lantern);
+  animation: window-flicker 1.8s steps(2) infinite;
+}
+.tavern-door {
+  position: relative;
+  width: 46px;
+  height: 68px;
+  background: #2a1a0e;
+  border: 3px solid #1a0f0a;
+  display: flex;
+  overflow: hidden;
+}
+.door-l, .door-r {
+  flex: 1;
+  height: 100%;
+  background: linear-gradient(180deg, var(--wood-1), var(--wood-0));
+  transition: transform 0.5s ease;
+}
+.door-l { border-right: 1px solid #1a0f0a; }
+.tavern-door.is-open .door-l { transform: translateX(-100%); }
+.tavern-door.is-open .door-r { transform: translateX(100%); }
+.title-mug {
+  position: absolute;
+  bottom: 20%;
+  left: 12%;
+  filter: drop-shadow(0 0 10px rgba(217, 154, 43, 0.7));
+  animation: float 2.4s ease-in-out infinite;
+}
+@keyframes float { 50% { transform: translateY(-6px); } }
+.tap-start {
+  position: absolute;
+  bottom: 3%;
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #000;
+  animation: blink 1s steps(1) infinite;
+}
+
+/* ---------- 宝箱（抽選・役職表示） ---------- */
+.chest, .reveal-chest {
+  position: relative;
+  width: 84px;
+  height: 66px;
+}
+.chest-body {
+  position: absolute;
+  bottom: 0;
+  width: 84px;
+  height: 42px;
+  background: linear-gradient(180deg, var(--wood-2), var(--wood-0));
+  border: 4px solid #1a0f0a;
+}
+.chest-lid {
+  position: absolute;
+  top: 0;
+  width: 84px;
+  height: 30px;
+  background: linear-gradient(180deg, var(--wood-1), var(--wood-2));
+  border: 4px solid #1a0f0a;
+  border-bottom: none;
+  transform-origin: bottom center;
+  transition: transform 0.4s var(--ease-pop);
+  z-index: 2;
+}
+.chest-body::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 16px;
+  background: var(--gold);
+  border: 3px solid #1a0f0a;
+}
+.chest-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 235, 150, 0.9), transparent 60%);
+  opacity: 0;
+  z-index: 1;
+}
+.is-shaking { animation: chest-shake 0.32s steps(2) infinite; }
+@keyframes chest-shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-2px) rotate(-1.5deg); }
+  75% { transform: translateX(2px) rotate(1.5deg); }
+}
+.is-shaking .chest-glow { animation: glow-pulse 0.6s ease-in-out infinite; }
+@keyframes glow-pulse { 50% { opacity: 0.8; } }
+.is-open .chest-lid, .chest.is-closing .chest-lid { transform: rotateX(0); }
+.is-open .chest-lid { transform: rotateX(-120deg); }
+.reveal-chest.is-open .chest-glow { opacity: 1; }
+
+/* 足跡 */
+.paw-trail { position: absolute; inset: 0; pointer-events: none; }
+.paw {
+  position: absolute;
+  top: 70%;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  opacity: 0;
+  animation: paw-cross 1.5s linear;
+}
+.paw--1 { left: 10%; animation-delay: 0.1s; }
+.paw--2 { left: 30%; top: 60%; animation-delay: 0.3s; }
+.paw--3 { left: 55%; top: 74%; animation-delay: 0.5s; }
+.paw--4 { left: 78%; top: 62%; animation-delay: 0.7s; }
+@keyframes paw-cross { 0%, 100% { opacity: 0; } 40% { opacity: 1; } }
+.paw-trail.is-hidden { opacity: 0; transition: opacity 0.3s; }
+
+/* ---------- 運命の扉（受け渡し・本人確認） ---------- */
+.fate-door-frame {
+  display: grid;
+  place-items: center;
+  padding: 6px;
+}
+.fate-door {
+  position: relative;
+  width: 108px;
+  height: 150px;
+  background: linear-gradient(180deg, var(--wood-1), var(--wood-0));
+  border: 5px solid #1a0f0a;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6), inset 0 0 0 3px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.fate-door-seam {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: #1a0f0a;
+}
+.fate-door-lock {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 30px;
+  background: var(--gold);
+  border: 3px solid #1a0f0a;
+  z-index: 2;
+  transition: transform 0.5s var(--ease-pop), opacity 0.4s;
+}
+.fate-door-lock::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 10px;
+  background: #1a0f0a;
+  border-radius: 3px 3px 0 0;
+}
+.fate-door.is-unlocked .fate-door-lock {
+  transform: translate(-50%, 40px) rotate(20deg);
+  opacity: 0;
+}
+
+/* ---------- 全員確認: 紙吹雪・シルエット ---------- */
+.confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+.confetti-piece {
+  position: absolute;
+  top: -12px;
+  width: 8px;
+  height: 8px;
+  background: var(--c, var(--gold));
+  animation: confetti-fall 2.4s linear infinite;
+}
+@keyframes confetti-fall {
+  to { transform: translateY(140%) rotate(360deg); }
+}
+.quest-start-banner {
+  font-family: var(--font-pixel);
+  font-weight: 700;
+  font-size: clamp(20px, 7vw, 34px);
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-shadow: 3px 3px 0 #000, 0 0 16px rgba(242, 211, 74, 0.5);
+  margin: 4px 0 0;
+  animation: pop-in 0.5s var(--ease-pop) both;
+}
+@keyframes pop-in { from { transform: scale(0.4); opacity: 0; } }
+.wolf-shadow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 40px;
+  background: #000;
+  clip-path: polygon(0 100%, 0 45%, 18% 45%, 26% 0, 40% 0, 46% 45%, 54% 45%, 60% 0, 74% 0, 82% 45%, 100% 45%, 100% 100%);
+  opacity: 0;
+  filter: drop-shadow(0 0 8px rgba(255, 59, 92, 0.4));
+  animation: wolf-flash 5s ease-in-out 1s;
+  pointer-events: none;
+}
+@keyframes wolf-flash {
+  0%, 100% { opacity: 0; }
+  48%, 52% { opacity: 0.28; }
+}

@@ -1,0 +1,51 @@
+/* ===== デザイントークン ===== */
+
+/* ドット風フォント（日本語含む・SIL OFL・ローカル同梱＝ゼロ通信を維持） */
+@font-face {
+  font-family: "DotGothic16";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/DotGothic16.woff2") format("woff2");
+}
+
+:root {
+  /* 夜の猫の王国パレット */
+  --bg-night-0: #05030c;
+  --bg-night-1: #0b0720;
+  --bg-night-2: #140b2e;
+  --bg-tavern: #241326;
+  --wood-0: #4a2f1e;
+  --wood-1: #6b4326;
+  --wood-2: #8a5a30;
+
+  /* RPGウィンドウ */
+  --win-bg: #0a0a1e;
+  --win-bg-2: #0f1030;
+  --win-border: #f4e7c1;
+  --win-border-2: #c9a227;
+  --win-text: #f6f2e6;
+  --win-shadow: rgba(0, 0, 0, 0.6);
+
+  /* アクセント */
+  --gold: #f2d34a;
+  --moon: #f7f3d0;
+  --lantern: #ffb454;
+  --danger: #ff3b5c;
+  --cursor: #ffd24a;
+
+  /* テキスト */
+  --ink: #f6f2e6;
+  --ink-dim: #b8b0c8;
+
+  /* フォント（全テキストをドット風に統一。読み込み失敗時のみゴシックへフォールバック） */
+  --font-jp: "DotGothic16", "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --font-pixel: "DotGothic16", ui-monospace, "SFMono-Regular", "Menlo", monospace;
+
+  /* サイズ（縦画面基準・vw連動でスケール） */
+  --stage-pad: clamp(12px, 4vw, 22px);
+  --radius-win: 4px;
+
+  /* モーション */
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
