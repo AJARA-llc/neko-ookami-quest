@@ -57,7 +57,7 @@ export function titleScreen(): HTMLElement {
     primeAudio();
     sfx.chest();
     door.classList.add("is-open");
-    window.setTimeout(() => navigate("count"), 620);
+    window.setTimeout(() => navigate("mode"), 620);
   });
 
   return root;

@@ -1,4 +1,4 @@
-import type { RoleDef, RoleId } from "./types";
+import type { GameMode, RoleDef, RoleId } from "./types";
 
 // ===== 役職定義 =====
 // テーマ色・パレットは「役職確認画面」でのみ使用する。本人確認前には露出しない。
@@ -53,29 +53,37 @@ export const ROLES: Record<RoleId, RoleDef> = {
 };
 
 /**
- * 役職構成（標準表・operator確定）。人数増で特殊役職が順に登場するバランス型。
- * ここ 1 箇所を変えれば全体の配分が変わる（config as single source of truth）。
+ * 役職構成（operator確定）。ここ 1 箇所を変えれば全体の配分が変わる
+ * （config as single source of truth）。あそびかたで 2 モードに分岐する。
  *
+ * standard（全役職・人数増で特殊役職が順に登場するバランス型）:
  *   3人 : 猫狼1 / 野良猫2
  *   4人 : 猫狼1 探偵1 / 野良猫2
  *   5人 : 猫狼1 探偵1 猫ババ1 / 野良猫2
  *   6-7人: +鋼の意志1
  *   8人以上: 猫狼2
  *   残りは全て野良猫
+ *
+ * simple（猫狼と野良猫だけ）:
+ *   8人未満: 猫狼1 / 残り野良猫
+ *   8人以上: 猫狼2 / 残り野良猫
  */
 export const MIN_PLAYERS = 3;
 export const MAX_PLAYERS = 12;
 
-export function composeRoles(playerCount: number): RoleId[] {
+export function composeRoles(playerCount: number, mode: GameMode = "standard"): RoleId[] {
   const n = clampPlayers(playerCount);
   const roles: RoleId[] = [];
 
   const wolves = n >= 8 ? 2 : 1;
   for (let i = 0; i < wolves; i++) roles.push("neko_ookami");
 
-  if (n >= 4) roles.push("holmes");
-  if (n >= 5) roles.push("nekobaba");
-  if (n >= 6) roles.push("hagane");
+  // シンプル版は特殊役職を出さない（猫狼と野良猫だけ）。
+  if (mode === "standard") {
+    if (n >= 4) roles.push("holmes");
+    if (n >= 5) roles.push("nekobaba");
+    if (n >= 6) roles.push("hagane");
+  }
 
   while (roles.length < n) roles.push("nora");
 

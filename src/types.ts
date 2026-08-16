@@ -3,9 +3,17 @@
 /** 役職ID。UI・URL・ファイル名には決して出さない内部識別子。 */
 export type RoleId = "neko_ookami" | "hagane" | "nora" | "nekobaba" | "holmes";
 
+/**
+ * あそびかた（役職構成モード）。
+ *   standard : 全役職（猫狼・探偵・猫ババ・鋼の意志・野良猫）
+ *   simple   : 猫狼と野良猫だけのシンプル版
+ */
+export type GameMode = "standard" | "simple";
+
 /** 画面ステート。ゲームは単一の状態機械として進行する。 */
 export type Screen =
   | "title"
+  | "mode"
   | "count"
   | "names"
   | "draw"
@@ -39,6 +47,8 @@ export interface RoleDef {
 /** ランタイムのゲーム状態。役職割当（roles）は秘匿情報。 */
 export interface GameState {
   screen: Screen;
+  /** あそびかた（役職構成モード）。 */
+  mode: GameMode;
   /** 参加人数。**登録されたなまえの数**で決まる（names が唯一の真実）。 */
   playerCount: number;
   /** プレイヤー名。index が冒険者番号に対応。 */

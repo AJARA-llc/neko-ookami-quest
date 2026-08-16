@@ -20,17 +20,19 @@ data can never leave the device because there is no channel for it to leave thro
 
 ## 2. Screen state machine
 
-役職フェイズのみ。参加人数は `names` 画面で登録された名前の数で決まる
-（`setNames` が `playerCount` を確定＝names が唯一の真実）。アクションカードは
+役職フェイズのみ。`mode` 画面で役職構成（standard=全役職 / simple=猫狼と野良猫だけ）を選び、
+`composeRoles(playerCount, mode)` が分岐する。参加人数は `names` 画面で登録された名前の数で
+決まる（`setNames` が `playerCount` を確定＝names が唯一の真実）。アクションカードは
 フィジカル運用のためアプリには実装しない。
 
 ```mermaid
 stateDiagram-v2
   [*] --> title
-  title --> count: tap
+  title --> mode: tap
+  mode --> count: あそびかたを選ぶ (setMode)
   count --> names: なまえを入力する
   names --> draw: 冒険をはじめる (入力名 >= 3)
-  draw --> handoff: 抽選完了 (drawRoles)
+  draw --> handoff: 抽選完了 (drawRoles / mode分岐)
 
   state "役職フェイズ" as RolePhase {
     handoff --> identity: 本人確認へ
@@ -48,7 +50,7 @@ stateDiagram-v2
 | Module | Responsibility |
 |---|---|
 | `state.ts` | 単一の状態機械。役職割当を保持（秘匿）。参加人数は登録名の数で確定。localStorage/URLに書かない。 |
-| `roles.ts` | 役職定義＋人数別構成（`composeRoles`, single source of truth）。 |
+| `roles.ts` | 役職定義＋人数別構成（`composeRoles(count, mode)`, single source of truth）。simpleは猫狼と野良猫だけ。 |
 | `router.ts` | 画面差し替え。履歴/URLを使わない（バックで役職を復元させない）。 |
 | `pixel.ts` | スプライトをデータから canvas 生成。役職名を含む画像/URLが存在しない。 |
 | `sfx.ts` | 共通効果音のみ。役職固有音は鳴らさない（周囲に漏らさない）。 |

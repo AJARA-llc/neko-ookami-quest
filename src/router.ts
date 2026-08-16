@@ -6,6 +6,7 @@ import type { Screen } from "./types";
 import { getState, setScreen } from "./state";
 
 import { titleScreen } from "./screens/title";
+import { modeScreen } from "./screens/mode";
 import { countScreen } from "./screens/count";
 import { namesScreen } from "./screens/names";
 import { drawScreen } from "./screens/draw";
@@ -17,6 +18,7 @@ import { questScreen } from "./screens/quest";
 
 const RENDERERS: Record<Screen, () => HTMLElement> = {
   title: titleScreen,
+  mode: modeScreen,
   count: countScreen,
   names: namesScreen,
   draw: drawScreen,

@@ -1,5 +1,35 @@
 /* ===== 画面別レイアウト ===== */
 
+/* ---------- あそびかた選択 ---------- */
+.scene--mode { justify-content: flex-start; }
+.mode-cards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 14px 0 18px;
+}
+.mode-card {
+  width: 100%;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, var(--win-bg-2), var(--win-bg));
+  border: 3px solid var(--win-border);
+  outline: 2px solid var(--win-border-2);
+  outline-offset: -6px;
+}
+.mode-card-title {
+  font-family: var(--font-pixel);
+  font-size: 17px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.mode-card-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  white-space: pre-line;
+}
+
 /* ---------- 5. 受付（人数入力） ---------- */
 .scene--reception { justify-content: flex-start; }
 .reception-bg {

@@ -1,4 +1,4 @@
-import type { GameState, RoleId, Screen } from "./types";
+import type { GameMode, GameState, RoleId, Screen } from "./types";
 import { clampPlayers, composeRoles, MIN_PLAYERS } from "./roles";
 
 // ===== ゲーム状態ストア =====
@@ -20,6 +20,7 @@ const FUR_PALETTE = [
 function freshState(): GameState {
   return {
     screen: "title",
+    mode: "standard",
     playerCount: 5,
     names: [],
     roles: [],
@@ -60,6 +61,11 @@ export function setPlayerCount(n: number): void {
   state.playerCount = clampPlayers(n);
 }
 
+/** あそびかた（役職構成モード）を確定。 */
+export function setMode(mode: GameMode): void {
+  state.mode = mode;
+}
+
 /**
  * 名前入力を確定。**実際に入力されたなまえの数**を参加人数の唯一の真実とする。
  * 事前の人数選択より優先。空欄は参加者として数えない
@@ -76,7 +82,7 @@ export function setNames(rawNames: string[]): void {
 
 /** 役職抽選を実行（秘匿。ここで初めて roles が埋まる）。 */
 export function drawRoles(): void {
-  state.roles = composeRoles(state.playerCount);
+  state.roles = composeRoles(state.playerCount, state.mode);
   state.currentPlayerIndex = 0;
   state.confirmedCount = 0;
 }

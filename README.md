@@ -12,7 +12,11 @@
 - **9:16 レスポンシブ**: 320px幅端末でも崩れない。片手操作、主要ボタンは下部。
 - **8bitサウンド**: Web Audio生成（音声ファイル不要）。既定OFF・事前選択制。
 
-## 役職（標準構成）
+## あそびかた（役職構成モード）
+
+タイトルの次の「あそびかた選択」画面で、2 モードから選ぶ。
+
+### おまかせ（標準構成）
 
 | 人数 | 猫狼 | ニャーロックホームズ | 猫ババ | 鋼の意志 | 野良猫 |
 |---|---|---|---|---|---|
@@ -22,13 +26,21 @@
 | 6-7 | 1 | 1 | 1 | 1 | 残り |
 | 8-12 | 2 | 1 | 1 | 1 | 残り |
 
-構成は `src/roles.ts` の `composeRoles()` 1箇所で定義（single source of truth）。変更はここだけ。
+### シンプル（猫狼と野良猫だけ）
+
+| 人数 | 猫狼 | 野良猫 |
+|---|---|---|
+| 3-7 | 1 | 残り |
+| 8-12 | 2 | 残り |
+
+構成は `src/roles.ts` の `composeRoles(playerCount, mode)` 1箇所で定義（single source of truth）。変更はここだけ。
 
 参加人数は**名前入力画面で登録されたなまえの数**で決まる（`setNames` が `playerCount` を確定）。
 人数選択画面で 5 びきにしても、名前を 4 人ぶんだけ登録すれば役職も 4 人ぶん。最少 3 人。
 
 ## ゲームの流れ
 
+0. あそびかた選択: おまかせ（全役職）か、シンプル（猫狼と野良猫だけ）を選ぶ
 1. 役職フェイズ: スマホを回して各自が役職をこっそり確認
 2. クエスト: フィジカルのアクションカード（紙）の指示を実行しながら、宴に潜む猫狼を当てる
    - アクションカードはアプリ外（紙）で運用する
@@ -59,14 +71,14 @@ npx wrangler pages deploy dist --project-name nyanro
 src/
   main.ts              エントリ（トップバー＋ルーター起動）
   types.ts             型定義（役職・状態）
-  roles.ts             役職定義＋人数別構成ロジック
+  roles.ts             役職定義＋人数別構成ロジック（モード分岐）
   state.ts             ゲーム状態ストア（役職秘匿の一次防衛線・参加人数は登録名の数で確定）
   router.ts            画面状態機械
   pixel.ts             ドット絵スプライト・レンダラ（canvas生成・画像アセット不使用）
   sfx.ts               8bit効果音（Web Audio）
   dom.ts               最小DOMヘルパー（innerHTML不使用＝XSS経路ゼロ）
   components/          会話ウィンドウ・コマンドメニュー・音声トグル
-  screens/             9画面（title→count→names→draw→[handoff→identity→reveal]→allConfirmed→quest）
+  screens/             10画面（title→mode→count→names→draw→[handoff→identity→reveal]→allConfirmed→quest）
   styles/              tokens / base / pixel / screens
 docs/flows/architecture.md   アーキテクチャ＋秘匿保証
 ```
